@@ -9,6 +9,7 @@ import notesRoutes from "./modules/notes/notes.routes";
 import hadithRoutes from "./modules/hadith/hadith.routes";
 import duaRoutes from "./modules/dua/dua.routes";
 import searchRoutes from "./modules/search/search.routes";
+import dashboardRoutes from "./modules/dashboard/dashboard.routes";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.use("/notes", notesRoutes);
 app.use("/hadith", hadithRoutes);
 app.use("/duas", duaRoutes);
 app.use("/search", searchRoutes);
+app.use("/dashboard", dashboardRoutes);
 
 const PORT = process.env.PORT || 5000;
 
