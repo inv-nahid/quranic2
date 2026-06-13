@@ -25,18 +25,35 @@ export async function getAyahById(id: string) {
   });
 }
 
-/**
- * Basic search (MVP)
- * Uses ILIKE for Postgres
- */
-export async function searchQuran(query: string) {
-  return prisma.quranAyah.findMany({
-    where: {
-      text: {
-        contains: query,
-        mode: "insensitive",
-      },
-    },
-    take: 50,
-  });
+export async function searchQuran(
+  query: string
+): Promise<any[]> {
+  return prisma.$queryRaw<any[]>`
+    SELECT
+      qa.id,
+      qa.number,
+      qa.text,
+      qa."surahId",
+      qs.name,
+      qs."englishName",
+
+      ts_rank(
+        to_tsvector('simple', qa.text),
+        plainto_tsquery('simple', ${query})
+      ) AS rank
+
+    FROM "QuranAyah" qa
+
+    JOIN "QuranSurah" qs
+      ON qs.id = qa."surahId"
+
+    WHERE
+      to_tsvector('simple', qa.text)
+      @@
+      plainto_tsquery('simple', ${query})
+
+    ORDER BY rank DESC
+
+    LIMIT 50
+  `;
 }

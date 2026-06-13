@@ -104,12 +104,13 @@ export async function searchHadith(
     const results = await searchHadiths(query);
 
     res.json(
-        results.map((hadith) => ({
+        (results as any[]).map((hadith) => ({
             id: hadith.id,
             hadithNumber: hadith.hadithNumber,
             chapter: hadith.chapter,
             narrator: hadith.narrator,
-            book: hadith.book.name,
+            book: hadith.bookName,
+            slug: hadith.slug,
             excerpt: hadith.englishText.slice(0, 200),
         }))
     );

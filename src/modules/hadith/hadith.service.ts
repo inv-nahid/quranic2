@@ -61,35 +61,44 @@ export async function getHadith(hadithId: string) {
     });
 }
 
-export async function searchHadiths(query: string) {
-    return prisma.hadith.findMany({
-        where: {
-            OR: [
-                {
-                    englishText: {
-                        contains: query,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    narrator: {
-                        contains: query,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    chapter: {
-                        contains: query,
-                        mode: "insensitive",
-                    },
-                },
-            ],
-        },
-        include: {
-            book: true,
-        },
-        take: 50,
-    });
+export async function searchHadiths(
+    query: string
+): Promise<any[]> {
+    return prisma.$queryRaw<any[]>`
+    SELECT
+      h.*,
+      hb.name AS "bookName",
+      hb.slug,
+
+      ts_rank(
+        to_tsvector(
+          'english',
+          coalesce(h."englishText",'') || ' ' ||
+          coalesce(h.narrator,'') || ' ' ||
+          coalesce(h.chapter,'')
+        ),
+        plainto_tsquery('english', ${query})
+      ) AS rank
+
+    FROM "Hadith" h
+
+    JOIN "HadithBook" hb
+      ON hb.id = h."bookId"
+
+    WHERE
+      to_tsvector(
+        'english',
+        coalesce(h."englishText",'') || ' ' ||
+        coalesce(h.narrator,'') || ' ' ||
+        coalesce(h.chapter,'')
+      )
+      @@
+      plainto_tsquery('english', ${query})
+
+    ORDER BY rank DESC
+
+    LIMIT 50
+  `;
 }
 
 export async function getRandomHadith() {

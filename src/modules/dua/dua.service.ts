@@ -68,33 +68,39 @@ export async function getDua(
 
 export async function searchDuas(
     query: string
-) {
-    return prisma.dua.findMany({
-        where: {
-            OR: [
-                {
-                    title: {
-                        contains: query,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    englishText: {
-                        contains: query,
-                        mode: "insensitive",
-                    },
-                },
-                {
-                    transliteration: {
-                        contains: query,
-                        mode: "insensitive",
-                    },
-                },
-            ],
-        },
-        include: {
-            category: true,
-        },
-        take: 50,
-    });
+): Promise<any[]> {
+    return prisma.$queryRaw<any[]>`
+    SELECT
+      d.*,
+      dc.name AS "categoryName",
+
+      ts_rank(
+        to_tsvector(
+          'english',
+          coalesce(d.title,'') || ' ' ||
+          coalesce(d."englishText",'') || ' ' ||
+          coalesce(d.transliteration,'')
+        ),
+        plainto_tsquery('english', ${query})
+      ) AS rank
+
+    FROM "Dua" d
+
+    JOIN "DuaCategory" dc
+      ON dc.id = d."categoryId"
+
+    WHERE
+      to_tsvector(
+        'english',
+        coalesce(d.title,'') || ' ' ||
+        coalesce(d."englishText",'') || ' ' ||
+        coalesce(d.transliteration,'')
+      )
+      @@
+      plainto_tsquery('english', ${query})
+
+    ORDER BY rank DESC
+
+    LIMIT 50
+  `;
 }

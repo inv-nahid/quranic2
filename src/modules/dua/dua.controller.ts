@@ -109,11 +109,10 @@ export async function searchDua(
     );
 
     res.json(
-        results.map((dua) => ({
+        (results as any[]).map((dua) => ({
             id: dua.id,
             title: dua.title,
-            category:
-                dua.category.name,
+            category: dua.categoryName,
             excerpt:
                 dua.englishText.slice(
                     0,
