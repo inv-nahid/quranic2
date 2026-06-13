@@ -2,8 +2,13 @@ import { prisma } from "../../config/prisma";
 import { hashPassword, comparePassword } from "../../utils/hash";
 import { signToken } from "../../utils/jwt";
 
-export async function registerUser(email: string, password: string) {
-  const existing = await prisma.user.findUnique({ where: { email } });
+export async function registerUser(
+  email: string,
+  password: string
+) {
+  const existing = await prisma.user.findUnique({
+    where: { email },
+  });
 
   if (existing) {
     throw new Error("User already exists");
@@ -18,25 +23,72 @@ export async function registerUser(email: string, password: string) {
     },
   });
 
-  const token = signToken({ userId: user.id });
+  const token = signToken({
+    userId: user.id,
+  });
 
-  return { user, token };
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      createdAt: user.createdAt,
+    },
+    token,
+  };
 }
 
-export async function loginUser(email: string, password: string) {
-  const user = await prisma.user.findUnique({ where: { email } });
+export async function loginUser(
+  email: string,
+  password: string
+) {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
 
   if (!user) {
     throw new Error("Invalid credentials");
   }
 
-  const isValid = await comparePassword(password, user.passwordHash);
+  const isValid = await comparePassword(
+    password,
+    user.passwordHash
+  );
 
   if (!isValid) {
     throw new Error("Invalid credentials");
   }
 
-  const token = signToken({ userId: user.id });
+  const token = signToken({
+    userId: user.id,
+  });
 
-  return { user, token };
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      createdAt: user.createdAt,
+    },
+    token,
+  };
+}
+
+export async function getCurrentUser(
+  userId: string
+) {
+  const user = await prisma.user.findUnique({
+    where: {
+      id: userId,
+    },
+    select: {
+      id: true,
+      email: true,
+      createdAt: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
 }
