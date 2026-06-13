@@ -91,3 +91,19 @@ export async function searchHadiths(query: string) {
         take: 50,
     });
 }
+
+export async function getRandomHadith() {
+    const total =
+        await prisma.hadith.count();
+
+    const skip = Math.floor(
+        Math.random() * total
+    );
+
+    return prisma.hadith.findFirst({
+        skip,
+        include: {
+            book: true,
+        },
+    });
+}

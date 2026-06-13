@@ -7,6 +7,7 @@ import {
     getBookHadiths,
     getHadith,
     searchHadiths,
+    getRandomHadith
 } from "./hadith.service";
 
 export async function fetchBooks(
@@ -112,4 +113,43 @@ export async function searchHadith(
             excerpt: hadith.englishText.slice(0, 200),
         }))
     );
+}
+
+export async function fetchRandomHadith(
+    req: Request,
+    res: Response
+) {
+    const hadith =
+        await getRandomHadith();
+
+    if (!hadith) {
+        return res.status(404).json({
+            message:
+                "Hadith not found",
+        });
+    }
+
+    res.json({
+        id: hadith.id,
+
+        hadithNumber:
+            hadith.hadithNumber,
+
+        chapter: hadith.chapter,
+
+        narrator:
+            hadith.narrator,
+
+        arabicText:
+            hadith.arabicText,
+
+        englishText:
+            hadith.englishText,
+
+        book: {
+            id: hadith.book.id,
+            name: hadith.book.name,
+            slug: hadith.book.slug,
+        },
+    });
 }

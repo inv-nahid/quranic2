@@ -6,6 +6,7 @@ import {
     fetchBookHadiths,
     fetchHadith,
     searchHadith,
+    fetchRandomHadith,
 } from "./hadith.controller";
 
 const router = Router();
@@ -20,6 +21,8 @@ router.get(
     "/book/:id/hadiths",
     fetchBookHadiths
 );
+
+router.get("/random", fetchRandomHadith);
 
 router.get("/:id", fetchHadith);
 

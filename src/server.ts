@@ -10,6 +10,7 @@ import hadithRoutes from "./modules/hadith/hadith.routes";
 import duaRoutes from "./modules/dua/dua.routes";
 import searchRoutes from "./modules/search/search.routes";
 import dashboardRoutes from "./modules/dashboard/dashboard.routes";
+import dailyRoutes from "./modules/daily/daily.routes";
 
 dotenv.config();
 const app = express();
@@ -30,6 +31,7 @@ app.use("/hadith", hadithRoutes);
 app.use("/duas", duaRoutes);
 app.use("/search", searchRoutes);
 app.use("/dashboard", dashboardRoutes);
+app.use("/daily", dailyRoutes);
 
 const PORT = process.env.PORT || 5000;
 
