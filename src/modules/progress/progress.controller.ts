@@ -10,28 +10,14 @@ export async function updateProgress(req: Request, res: Response) {
   res.json(data);
 }
 
-export async function fetchProgress(req: Request, res: Response) {
+export async function fetchProgress(
+  req: Request,
+  res: Response
+) {
   const userId = (req as any).userId;
-
   const progress = await getProgress(userId);
-
-  if (!progress) {
-    return res.json(null);
-  }
-
-  res.json({
-    updatedAt: progress.updatedAt,
-    surah: {
-      id: progress.ayah.surah.id,
-      name: progress.ayah.surah.name,
-      englishName: progress.ayah.surah.englishName,
-    },
-    ayah: {
-      id: progress.ayah.id,
-      number: progress.ayah.number,
-      text: progress.ayah.text,
-    },
-  });
+  if (!progress) return res.json(null);
+  res.json(progress);
 }
 
 export async function fetchHistory(
