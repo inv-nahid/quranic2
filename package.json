@@ -10,7 +10,8 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "seed:quran": "ts-node src/scripts/seedQuran.ts",
-    "seed:hadith": "tsx src/scripts/hadith/seedHadith.ts"
+    "seed:hadith": "tsx src/scripts/hadith/seedHadith.ts",
+    "seed:dua": "tsx src/scripts/dua/seedDuas.ts"
   },
   "keywords": [],
   "author": "",

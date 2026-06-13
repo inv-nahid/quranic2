@@ -7,6 +7,7 @@ import progressRoutes from "./modules/progress/progress.routes";
 import favoriteRoutes from "./modules/favorites/favorites.routes";
 import notesRoutes from "./modules/notes/notes.routes";
 import hadithRoutes from "./modules/hadith/hadith.routes";
+import duaRoutes from "./modules/dua/dua.routes";
 
 dotenv.config();
 const app = express();
@@ -24,6 +25,7 @@ app.use("/progress", progressRoutes);
 app.use("/favorites", favoriteRoutes);
 app.use("/notes", notesRoutes);
 app.use("/hadith", hadithRoutes);
+app.use("/duas", duaRoutes);
 
 const PORT = process.env.PORT || 5000;
 

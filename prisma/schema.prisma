@@ -115,17 +115,39 @@ model Hadith {
 }
 
 model DuaCategory {
-  id   String @id @default(cuid())
+  id String @id @default(cuid())
+
+  sourceId Int @unique
+
+  slug String @unique
+
   name String
+
   duas Dua[]
 }
 
 model Dua {
-  id         String      @id @default(cuid())
+  id String @id @default(cuid())
+
+  sourceId Int @unique
+
   categoryId String
-  title      String
-  text       String
-  category   DuaCategory @relation(fields: [categoryId], references: [id])
+
+  title String
+
+  arabicText String
+
+  transliteration String?
+
+  englishText String
+
+  repeat Int?
+
+  audioUrl String?
+
+  category DuaCategory @relation(fields: [categoryId], references: [id])
+
+  @@index([categoryId])
 }
 
 model Topic {
