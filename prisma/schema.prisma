@@ -69,28 +69,49 @@ model Note {
   content   String
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  ayah      QuranAyah? @relation(fields: [ayahId], references: [id])
-  user      User       @relation(fields: [userId], references: [id])
+
+  ayah QuranAyah? @relation(fields: [ayahId], references: [id])
+  user User       @relation(fields: [userId], references: [id])
 
   @@index([userId])
+  @@index([userId, ayahId])
 }
 
 model HadithBook {
-  id      String   @id @default(cuid())
-  name    String
+  id          String @id @default(cuid())
+
+  sourceId    Int    @unique
+
+  slug        String @unique
+  name        String
+  description String?
+
   hadiths Hadith[]
 }
 
 model Hadith {
-  id        String     @id @default(cuid())
-  bookId    String
-  chapter   String?
-  text      String
-  reference String?
-  number    Int?
-  book      HadithBook @relation(fields: [bookId], references: [id])
+  id String @id @default(cuid())
+
+  sourceId Int @unique
+
+  bookId String
+
+  hadithNumber Int?
+
+  chapterId Int?
+
+  chapter String?
+
+  narrator String?
+
+  arabicText String?
+
+  englishText String
+
+  book HadithBook @relation(fields: [bookId], references: [id])
 
   @@index([bookId])
+  @@index([hadithNumber])
 }
 
 model DuaCategory {
