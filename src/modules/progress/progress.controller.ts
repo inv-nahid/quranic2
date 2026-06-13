@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { getParam } from "../../utils/params";
-import { upsertProgress, getProgress, deleteProgress } from "./progress.service";
+import { upsertProgress, getHistory, getStats, getStreak, getProgress, deleteProgress } from "./progress.service";
 
 export async function updateProgress(req: Request, res: Response) {
   const userId = (req as any).userId;
@@ -32,6 +32,60 @@ export async function fetchProgress(req: Request, res: Response) {
       text: progress.ayah.text,
     },
   });
+}
+
+export async function fetchHistory(
+  req: Request,
+  res: Response
+) {
+  const userId = (req as any).userId;
+
+  const history = await getHistory(
+    userId
+  );
+
+  res.json(
+    history.map((item) => ({
+      readAt: item.createdAt,
+
+      surah: {
+        id: item.ayah.surah.id,
+        name: item.ayah.surah.name,
+        englishName:
+          item.ayah.surah.englishName,
+      },
+
+      ayah: {
+        id: item.ayah.id,
+        number: item.ayah.number,
+      },
+    }))
+  );
+}
+
+export async function fetchStats(
+  req: Request,
+  res: Response
+) {
+  const userId = (req as any).userId;
+
+  const stats = await getStats(
+    userId
+  );
+
+  res.json(stats);
+}
+
+export async function fetchStreak(
+  req: Request,
+  res: Response
+) {
+  const userId = (req as any).userId;
+
+  const streak =
+    await getStreak(userId);
+
+  res.json(streak);
 }
 
 export async function clearProgress(req: Request, res: Response) {
