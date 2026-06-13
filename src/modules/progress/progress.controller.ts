@@ -36,7 +36,16 @@ export async function fetchProgress(req: Request, res: Response) {
 
 export async function clearProgress(req: Request, res: Response) {
   const userId = (req as any).userId;
+
   const deleted = await deleteProgress(userId);
-  if (!deleted) return res.status(404).json({ message: "No saved progress found" });
-  res.json({ message: "Progress cleared successfully" });
+
+  if (!deleted) {
+    return res.status(404).json({
+      message: "No saved progress found",
+    });
+  }
+
+  res.json({
+    message: "Progress cleared successfully",
+  });
 }
