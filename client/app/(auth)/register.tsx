@@ -16,8 +16,8 @@ import {
     useAuth,
 } from "@/src/hooks/useAuth";
 
-export default function Login() {
-    const { login } =
+export default function Register() {
+    const { register } =
         useAuth();
 
     const [email, setEmail] =
@@ -28,8 +28,8 @@ export default function Login() {
         setPassword,
     ] = useState("");
 
-    async function handleLogin() {
-        await login(
+    async function handleRegister() {
+        await register(
             email,
             password
         );
@@ -63,18 +63,17 @@ export default function Login() {
             />
 
             <Button
-                title="Login"
+                title="Register"
                 onPress={
-                    handleLogin
+                    handleRegister
                 }
             />
 
             <Link
-                href="/(auth)/register"
+                href="/(auth)/login"
             >
-                Register
+                Login
             </Link>
         </View>
     );
 }
-

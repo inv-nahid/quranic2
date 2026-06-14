@@ -1,9 +1,5 @@
-import { Redirect } from "expo-router";
+import AuthBootstrap from "@/src/components/AuthBootstrap";
 
 export default function Index() {
-    return (
-        <Redirect
-            href="/(auth)/login"
-        />
-    );
+    return <AuthBootstrap />;
 }
