@@ -1,8 +1,20 @@
 import axios from "axios";
 import { getToken } from "@/src/lib/secure-store";
 
+const getBaseURL = () => {
+    if (
+        typeof process !== "undefined" &&
+        process.env &&
+        process.env.EXPO_PUBLIC_API_URL
+    ) {
+        return process.env.EXPO_PUBLIC_API_URL;
+    }
+
+    return "http://localhost:5000";
+};
+
 export const api = axios.create({
-    baseURL: process.env.EXPO_PUBLIC_API_URL || "http://localhost:5000",
+    baseURL: getBaseURL(),
     headers: {
         "Content-Type": "application/json",
     },
@@ -10,8 +22,7 @@ export const api = axios.create({
 
 api.interceptors.request.use(
     async (config) => {
-        const token =
-            await getToken();
+        const token = await getToken();
 
         if (token) {
             config.headers.Authorization =
@@ -20,7 +31,5 @@ api.interceptors.request.use(
 
         return config;
     },
-    (error) =>
-        Promise.reject(error)
+    (error) => Promise.reject(error)
 );
-

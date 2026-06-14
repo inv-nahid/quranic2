@@ -1,0 +1,8 @@
+{
+    "name": "Quranic",
+    "description": "A premium spiritual companion featuring search-enabled Al-Quran translations, authentic Hadiths, and daily supplications.",
+    "requestFramePermissions": [],
+    "majorCapabilities": [
+        "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+    ]
+}

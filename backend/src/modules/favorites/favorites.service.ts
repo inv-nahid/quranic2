@@ -49,6 +49,7 @@ export async function getFavorites(userId: string) {
             return {
                 id: favorite.id,
                 type: favorite.type,
+                refId: favorite.refId,
                 createdAt: favorite.createdAt,
                 data: ayah
                     ? {
@@ -70,6 +71,7 @@ export async function getFavorites(userId: string) {
         return {
             id: favorite.id,
             type: favorite.type,
+            refId: favorite.refId,
             createdAt: favorite.createdAt,
             data: null,
         };
