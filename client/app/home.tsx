@@ -6,8 +6,7 @@ import {
 
 import { useAuth } from "@/src/hooks/useAuth";
 import { useAuthStore } from "@/src/store/auth.store";
-
-import { getMe } from "@/src/services/auth.service";
+import { useMeQuery } from "@/src/queries/auth.queries";
 
 export default function Home() {
     const { logout } = useAuth();
@@ -15,6 +14,12 @@ export default function Home() {
     const user = useAuthStore(
         (state) => state.user
     );
+
+    const {
+        data,
+        isLoading,
+        error,
+    } = useMeQuery();
 
     return (
         <View
@@ -27,15 +32,19 @@ export default function Home() {
         >
             <Text>Welcome</Text>
 
-            <Text>{user?.email}</Text>
+            <Text>
+                Zustand:
+                {" "}
+                {user?.email}
+            </Text>
 
-            <Button
-                title="Get Me"
-                onPress={async () => {
-                    const me = await getMe();
-                    console.log(me);
-                }}
-            />
+            <Text>
+                Query:
+                {" "}
+                {isLoading
+                    ? "Loading..."
+                    : data?.email}
+            </Text>
 
             <Button
                 title="Logout"
